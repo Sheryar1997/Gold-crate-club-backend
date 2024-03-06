@@ -4,7 +4,9 @@ const recurly = require('recurly');
 const cors = require('cors');
 const app = express();
 const port = process.env.PORT;
-const client = new recurly.Client(process.env.API_KEY);
+const apiKey = process.env.API_KEY;
+console.log(apiKey);
+const client = new recurly.Client(apiKey);
 app.use(cors());
 
 // Define endpoint to retrieve plans
@@ -15,27 +17,12 @@ app.get('/plans', async (req, res) => {
     for await (const plan of plans.each()) {
       planArr.push(plan)
     }
+    console.log('plans which are fetched ',planArr);
     res.status(200).send(planArr);
   } catch (error) {
     console.error('Error fetching plans:', error);
     res.status(500).json({ error: 'Failed to fetch plans' });
   }
-
-  // try {
-  //   const plan = await client.getPlan('code-diamond')
-  //   console.log('Fetched plan: ', plan.code)
-  //   res.status(200).json(plan);
-  // } catch (err) {
-  //   if (err instanceof recurly.errors.NotFoundError) {
-  //     // If the request was not found, you may want to alert the user or
-  //     // just return null
-  //     console.log('Resource Not Found')
-  //   } else {
-  //     // If we don't know what to do with the err, we should
-  //     // probably re-raise and let our web framework and logger handle it
-  //     console.log('Unknown Error: ', err)
-  //   }
-  // }
 });
 
 app.listen(port, () => {
