@@ -9,7 +9,12 @@ const apiKey = process.env.API_KEY;
 const client = new recurly.Client(apiKey);
 const port = process.env.PORT;
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://gold-crate-club.vercel.app',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 const accountCode = uuidv4();
 
 // Define endpoint to retrieve plans
