@@ -17,7 +17,9 @@ const port = process.env.PORT;
 app.use(cors({
   origin: "*", // Allow all origins
   credentials: true, // Allow cookies
-}));const accountCode = uuidv4();
+}));
+
+const accountCode = uuidv4();
 
 // Define endpoint to retrieve plans
 app.get('/plans', async (req, res) => {
@@ -108,7 +110,7 @@ app.post('/create-account', async (req, res) => {
  
   try {
      let subscriptionReq = {
-       plan_code: 'diamond', // Changed to plan_code
+       plan_code: req.body.planCode, // Changed to plan_code
        currency: `USD`,
        account: {
          code: accountCode, // Changed to account_code
