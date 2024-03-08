@@ -121,6 +121,7 @@ app.post('/create-account', async (req, res) => {
      }
      let sub = await client.createSubscription(subscriptionReq)
      console.log('Created subscription: ', sub.uuid)
+     res.status(200).send(true);
   } catch (err) {
      console.error('Error creating subscription:', err); // Logging the entire error object
      if (err instanceof recurly.errors.ValidationError) {
@@ -128,6 +129,7 @@ app.post('/create-account', async (req, res) => {
      } else {
        console.log('Unknown Error: ', err)
      }
+     res.status(500).send('Server Error');
   }
  });
  
