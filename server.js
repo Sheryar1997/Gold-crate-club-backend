@@ -105,16 +105,15 @@ app.post('/create-account', async (req, res) => {
  
   try {
      let subscriptionReq = {
-       plan_code: req.body.planCode, // Changed to plan_code
+       plan_code: req.body.planCode,
        currency: `USD`,
        account: {
-         code: accountCode, // Changed to account_code
-         // Additional account information can be added here if available
+         code: accountCode,
          billing_info: {
            token_id: req.body.recurlyToken.id,
          }
        },
-       // Example of adding subscription add-ons
+       coupon_codes: [req.body.couponCode]
      }
      let sub = await client.createSubscription(subscriptionReq)
      console.log('Created subscription: ', sub.uuid)
@@ -129,8 +128,27 @@ app.post('/create-account', async (req, res) => {
      res.status(500).send('Server Error');
   }
  });
+//  app.post('/check-coupon', async (req, res) => {
+//   try {
+//     // Assuming `client` is defined elsewhere
 
- app.get('/getCoupons', async (req, res) => {
+//     // Attempt to create a coupon redemption
+//     let couponRedemption = await client.createCouponRedemption('code-elplogga1990@gmail.com', req.body);
+
+//     // Log the coupon redemption
+//     console.log(couponRedemption);
+
+//     // Send the coupon redemption details as the response
+//     res.status(200).send(couponRedemption);
+//   } catch (error) {
+//     // Handle errors
+//     console.error('Error creating coupon redemption:', error);
+//     res.status(500).send('Error creating coupon redemption');
+//   }
+// });
+
+
+ app.get('/get-coupons', async (req, res) => {
 
   try {
     let couponsArr = []
@@ -138,6 +156,7 @@ app.post('/create-account', async (req, res) => {
     for await (const coupon of coupons.each()) {
       couponsArr.push(coupon)
     }
+    console.log(couponsArr);
     res.status(200).send(couponsArr);
   } catch (error) {
     
