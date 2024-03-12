@@ -9,11 +9,6 @@ const apiKey = process.env.API_KEY;
 const client = new recurly.Client(apiKey);
 const port = process.env.PORT;
 
-// const corsOptions = {
-//   origin: 'https://gold-crate-club.vercel.app',
-//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
-
 app.use(cors({
   origin: "*", // Allow all origins
   credentials: true, // Allow cookies
@@ -133,6 +128,21 @@ app.post('/create-account', async (req, res) => {
      }
      res.status(500).send('Server Error');
   }
+ });
+
+ app.get('/getCoupons', async (req, res) => {
+
+  try {
+    let couponsArr = []
+    const coupons = client.listCoupons({ params: { limit: 200 } })
+    for await (const coupon of coupons.each()) {
+      couponsArr.push(coupon)
+    }
+    res.status(200).send(couponsArr);
+  } catch (error) {
+    
+  }
+
  });
  
 
