@@ -16,7 +16,7 @@ app.use(cors({
 
 const accountCode = uuidv4();
 
-// Define endpoint to retrieve plans
+// Endpoint to retrieve plans
 app.get('/plans', async (req, res) => {
   try {
     let planArr = []
@@ -99,6 +99,9 @@ app.get('/plans', async (req, res) => {
   
 // });
 
+
+
+//Endpoint to create subscription 
 app.post('/create-account', async (req, res) => {
   console.log(req.body);
   //const accountCode = uuidv4();
@@ -128,42 +131,32 @@ app.post('/create-account', async (req, res) => {
      res.status(500).send('Server Error');
   }
  });
-//  app.post('/check-coupon', async (req, res) => {
-//   try {
-//     // Assuming `client` is defined elsewhere
 
-//     // Attempt to create a coupon redemption
-//     let couponRedemption = await client.createCouponRedemption('code-elplogga1990@gmail.com', req.body);
-
-//     // Log the coupon redemption
-//     console.log(couponRedemption);
-
-//     // Send the coupon redemption details as the response
-//     res.status(200).send(couponRedemption);
-//   } catch (error) {
-//     // Handle errors
-//     console.error('Error creating coupon redemption:', error);
-//     res.status(500).send('Error creating coupon redemption');
-//   }
-// });
-
-
- app.get('/get-coupons', async (req, res) => {
-
+ //Fetch single coupon based on coupon code 
+ app.get('/get-coupon', async (req, res) => {
   try {
-    let couponsArr = []
-    const coupons = client.listCoupons({ params: { limit: 200 } })
-    for await (const coupon of coupons.each()) {
-      couponsArr.push(coupon)
-    }
-    console.log(couponsArr);
-    res.status(200).send(couponsArr);
-  } catch (error) {
+    const couponParam = 'code-' + req.query.couponParam;
     
+    const coupon = await client.getCoupon(couponParam);
+    
+    if (coupon) {
+      console.log('Fetched coupon: ', coupon);
+      res.json(coupon);
+    } else {
+      console.log('Coupon not found');
+      res.status(404).json({ error: 'Coupon not found' });
+    }
+  } catch (err) {
+    if (err instanceof recurly.errors.NotFoundError) {
+      console.log('Resource Not Found');
+      res.status(404).json({ error: 'Resource not found' });
+    } else {
+      console.log('Unknown Error: ', err);
+      res.status(500).json({ error: 'Server Error' });
+    }
   }
+});
 
- });
- 
 
 app.listen(port, () => {
   console.log(`Server is listening at http://localhost:${port}`);
