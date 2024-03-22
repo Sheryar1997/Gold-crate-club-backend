@@ -31,71 +31,41 @@ app.get('/plans', async (req, res) => {
   }
 });
 
-// Endpoint to create a Recurly account
+//Endpoint to create a Recurly account
 // app.post('/create-account', async (req, res) => {
 //   console.log(req.body);
 //   const accountCode = uuidv4();
-//   //const { country, firstName, lastName, address, apartment, city, region, zip, recurlyToken  } = req.body;
+// const { country, firstName, lastName, address, apartment, city, region, zip, recurlyToken  } = req.body;
 
-//   // const accountCreate = {
-//   //   code: accountCode,
-//   //   firstName: firstName,
-//   //   lastName: lastName,
-//   //   preferredTimeZone: 'America/Guatemala',
-//   //   address: {
-//   //     street1: address,
-//   //     city: city,
-//   //     region: region,
-//   //     postalCode: zip,
-//   //     country: country
-//   //   },
-//   //   billing_info:{
-//   //     token_id: recurlyToken
-//   //   }
-//   // };
-
-//   // try {
-//   //   const account = await client.createAccount(accountCreate);
-//   //   console.log('Created Account: ', account.code);
-//   //   res.status(201).json({ message: 'Account created successfully', accountCode: account.code });
-//   // } catch (error) {
-//   //   console.error('Error creating account:', error);
-//   //   if (error instanceof recurly.errors.ValidationError) {
-//   //     res.status(400).json({ error: 'Validation failed', details: error.params });
-//   //   } else {
-//   //     res.status(500).json({ error: 'Internal server error' });
-//   //   }
-//   // }
-
-//   try {
-//     let subscriptionReq = {
-//       plan_code: 'diamond',
-//       currency: `USD`,
-//       account: {
-//         code: accountCode,
-//         billing_info:{
-//           token_id: req.body.recurlyToken.id,
-//           address:{
-//             country: 'US'
-//           }
-//         }
-//       }
-      
-
-//     }
-//     let sub = await client.createSubscription(subscriptionReq)
-//     console.log('Created subscription: ', sub.uuid)
-//   } catch (err) {
-//     if (err instanceof recurly.errors.ValidationError) {
-//       // If the request was not valid, you may want to tell your user
-//       // why. You can find the invalid params and reasons in err.params
-//       console.log('Failed validation', err.params)
-//     } else {
-//       // If we don't know what to do with the err, we should
-//       // probably re-raise and let our web framework and logger handle it
-//       console.log('Unknown Error: ', err)
-//     }
+// const accountCreate = {
+//   code: accountCode,
+//   firstName: firstName,
+//   lastName: lastName,
+//   preferredTimeZone: 'America/Guatemala',
+//   address: {
+//     street1: address,
+//     city: city,
+//     region: region,
+//     postalCode: zip,
+//     country: country
+//   },
+//   billing_info:{
+//     token_id: recurlyToken
 //   }
+// };
+
+// try {
+//   const account = await client.createAccount(accountCreate);
+//   console.log('Created Account: ', account.code);
+//   res.status(201).json({ message: 'Account created successfully', accountCode: account.code });
+// } catch (error) {
+//   console.error('Error creating account:', error);
+//   if (error instanceof recurly.errors.ValidationError) {
+//     res.status(400).json({ error: 'Validation failed', details: error.params });
+//   } else {
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// }
   
 // });
 
@@ -111,10 +81,21 @@ app.post('/create-account', async (req, res) => {
        plan_code: req.body.planCode,
        currency: `USD`,
        account: {
-         code: accountCode,
+         code: req.body.email,
          billing_info: {
            token_id: req.body.recurlyToken.id,
          }
+       },
+       shipping: {
+        address: {
+          first_name: req.body.firstName,
+          last_name: req.body.lastName,
+          street1: req.body.address,
+          city: req.body.city,
+          region: req.body.selectedRegion,
+          postal_code: req.body.zip,
+          country: req.body.selectedCountry
+        }
        },
        coupon_codes: [req.body.couponCode]
      }
