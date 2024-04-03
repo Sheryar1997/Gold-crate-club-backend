@@ -56,8 +56,12 @@ app.post('/create-account', async (req, res) => {
           country: req.body.selectedCountry
         }
        },
-       coupon_codes: req.body.couponCode ? [req.body.couponCode] : ''
      }
+
+     if (req.body.couponCode) {
+      subscriptionReq.coupon_codes = [req.body.couponCode];
+    }
+
      let sub = await client.createSubscription(subscriptionReq);
      console.log('Created subscription:', sub.uuid);
      res.status(200).json({ success: true, uuid: sub.uuid });
