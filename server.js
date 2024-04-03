@@ -56,7 +56,7 @@ app.post('/create-account', async (req, res) => {
           country: req.body.selectedCountry
         }
        },
-       coupon_codes: [req.body.couponCode]
+       coupon_codes: req.body.couponCode ? [req.body.couponCode] : ''
      }
      let sub = await client.createSubscription(subscriptionReq);
      console.log('Created subscription:', sub.uuid);
@@ -97,6 +97,12 @@ app.post('/create-account', async (req, res) => {
     }
   }
 });
+
+app.post('/apple-pay-payment-info', (req, res) => {
+  console.log('Received payment object:', req.body);
+  res.send({ success: true, message: 'Payment object received successfully' });
+});
+
 
 
 app.listen(port, () => {
