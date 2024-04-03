@@ -31,50 +31,9 @@ app.get('/plans', async (req, res) => {
   }
 });
 
-//Endpoint to create a Recurly account
-// app.post('/create-account', async (req, res) => {
-//   console.log(req.body);
-//   const accountCode = uuidv4();
-// const { country, firstName, lastName, address, apartment, city, region, zip, recurlyToken  } = req.body;
-
-// const accountCreate = {
-//   code: accountCode,
-//   firstName: firstName,
-//   lastName: lastName,
-//   preferredTimeZone: 'America/Guatemala',
-//   address: {
-//     street1: address,
-//     city: city,
-//     region: region,
-//     postalCode: zip,
-//     country: country
-//   },
-//   billing_info:{
-//     token_id: recurlyToken
-//   }
-// };
-
-// try {
-//   const account = await client.createAccount(accountCreate);
-//   console.log('Created Account: ', account.code);
-//   res.status(201).json({ message: 'Account created successfully', accountCode: account.code });
-// } catch (error) {
-//   console.error('Error creating account:', error);
-//   if (error instanceof recurly.errors.ValidationError) {
-//     res.status(400).json({ error: 'Validation failed', details: error.params });
-//   } else {
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// }
-  
-// });
-
-
-
 //Endpoint to create subscription 
 app.post('/create-account', async (req, res) => {
-  console.log(req.body);
-  //const accountCode = uuidv4();
+  console.log('Request body:', req.body);
  
   try {
      let subscriptionReq = {
@@ -99,17 +58,18 @@ app.post('/create-account', async (req, res) => {
        },
        coupon_codes: [req.body.couponCode]
      }
-     let sub = await client.createSubscription(subscriptionReq)
-     console.log('Created subscription: ', sub.uuid)
-     res.status(200).send(true);
+     let sub = await client.createSubscription(subscriptionReq);
+     console.log('Created subscription:', sub.uuid);
+     res.status(200).json({ success: true, uuid: sub.uuid });
   } catch (err) {
-     console.error('Error creating subscription:', err); // Logging the entire error object
-     if (err instanceof recurly.errors.ValidationError) {
-       console.log('Failed validation', err.params)
-     } else {
-       console.log('Unknown Error: ', err)
-     }
-     res.status(500).send('Server Error');
+    console.error('Error creating subscription:', err.message);
+    if (err instanceof recurly.errors.ValidationError) {
+      console.error('Failed validation:', err.params);
+      res.status(400).json({ error: 'Validation error', details: err.params });
+    } else {
+      console.error('Unknown error:', err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
   }
  });
 
