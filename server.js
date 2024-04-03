@@ -33,8 +33,6 @@ app.get('/plans', async (req, res) => {
 
 //Endpoint to create subscription 
 app.post('/create-account', async (req, res) => {
-  console.log('Request body:', req.body);
- 
   try {
      let subscriptionReq = {
        plan_code: req.body.planCode,
@@ -61,6 +59,8 @@ app.post('/create-account', async (req, res) => {
      if (req.body.couponCode) {
       subscriptionReq.coupon_codes = [req.body.couponCode];
     }
+    console.log(subscriptionReq);
+
 
      let sub = await client.createSubscription(subscriptionReq);
      console.log('Created subscription:', sub.uuid);
