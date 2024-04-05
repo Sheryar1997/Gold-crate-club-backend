@@ -14,8 +14,6 @@ app.use(cors({
   credentials: true, // Allow cookies
 }));
 
-const accountCode = uuidv4();
-
 // Endpoint to retrieve plans
 app.get('/plans', async (req, res) => {
   try {
@@ -29,6 +27,45 @@ app.get('/plans', async (req, res) => {
     console.error('Error fetching plans:', error);
     res.status(500).json({ error: 'Failed to fetch plans' });
   }
+});
+
+app.get('/get-account', async (req, res) => {
+
+  try {
+    const subscripitonArray = []
+    const accountCode = 'code-' + req.query.accountCode;
+  
+    const subscriptions = client.listAccountSubscriptions(accountCode, { params: { limit: 200 } })
+    
+    for await (const subscription of subscriptions.each()) {
+      console.log(subscription)
+      subscripitonArray.push(subscription);
+    }
+    
+    res.status(200).send(subscripitonArray);  
+  } catch (error) {
+    console.log('Error while fetching subscription of an account == ', error );
+    res.status(500).json({ error: 'Failed to fetch subscription of an account' });
+  }
+  
+  
+
+
+  // try {
+  //   const account = await client.getAccount(accountCode)
+  //   console.log('Fetched account: ', account)
+  // } catch (err) {
+  //   if (err instanceof recurly.errors.NotFoundError) {
+  //     // If the request was not found, you may want to alert the user or
+  //     // just return null
+  //     console.log('Resource Not Found')
+  //   } else {
+  //     // If we don't know what to do with the err, we should
+  //     // probably re-raise and let our web framework and logger handle it
+  //     console.log('Unknown Error: ', err)
+  //   }
+  // }
+  
 });
 
 //Endpoint to create subscription 
