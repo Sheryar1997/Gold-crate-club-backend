@@ -76,6 +76,7 @@ app.post('/create-account', async (req, res) => {
        currency: `USD`,
        account: {
          code: req.body.email,
+         first_name: req.body.firstName,
          billing_info: {
            token_id: req.body.recurlyToken.id,
          }
