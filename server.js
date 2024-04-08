@@ -29,6 +29,8 @@ app.get('/plans', async (req, res) => {
   }
 });
 
+
+// Endpoint to recive subscriptions of a account
 app.get('/get-account', async (req, res) => {
 
   try {
@@ -47,24 +49,6 @@ app.get('/get-account', async (req, res) => {
     console.log('Error while fetching subscription of an account == ', error );
     res.status(500).json({ error: 'Failed to fetch subscription of an account' });
   }
-  
-  
-
-
-  // try {
-  //   const account = await client.getAccount(accountCode)
-  //   console.log('Fetched account: ', account)
-  // } catch (err) {
-  //   if (err instanceof recurly.errors.NotFoundError) {
-  //     // If the request was not found, you may want to alert the user or
-  //     // just return null
-  //     console.log('Resource Not Found')
-  //   } else {
-  //     // If we don't know what to do with the err, we should
-  //     // probably re-raise and let our web framework and logger handle it
-  //     console.log('Unknown Error: ', err)
-  //   }
-  // }
   
 });
 
