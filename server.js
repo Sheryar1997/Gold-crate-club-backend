@@ -61,6 +61,8 @@ app.post('/create-account', async (req, res) => {
        account: {
          code: req.body.email,
          first_name: req.body.firstName,
+         last_name: req.body.lastName,
+         email: req.body.email,
          billing_info: {
            token_id: req.body.recurlyToken.id,
          }
@@ -69,6 +71,7 @@ app.post('/create-account', async (req, res) => {
         address: {
           first_name: req.body.firstName,
           last_name: req.body.lastName,
+          email: req.body.email,
           street1: req.body.address,
           city: req.body.city,
           region: req.body.selectedRegion,
