@@ -88,8 +88,8 @@ app.post('/create-account', async (req, res) => {
 
 
      let sub = await client.createSubscription(subscriptionReq);
-     console.log('Created subscription:', sub.uuid);
-     res.status(200).json({ success: true, uuid: sub.uuid });
+     console.log('Created subscription:', sub);
+     res.status(200).json({ success: true, orderDetails: sub });
   } catch (err) {
     console.error('Error creating subscription:', err.message);
     if (err instanceof recurly.errors.ValidationError) {
