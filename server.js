@@ -98,15 +98,15 @@ app.post('/create-account', async (req, res) => {
 
     let sub = await client.createSubscription(subscriptionReq);
     console.log('Created subscription:', sub);
-    res.status(200).json({ success: true, orderDetails: sub });
+    res.status(200).json({ success: true, orderDetails: sub,codeUpdate:true });
   } catch (err) {
     console.error('Error creating subscription:', err.message);
     if (err instanceof recurly.errors.ValidationError) {
       console.error('Failed validation:', err.params);
-      res.status(400).json({ error: 'Validation error', details: err.params });
+      res.status(400).json({ error: 'Validation error', details: err.params,codeUpdate:true });
     } else {
       console.error('Unknown error:', err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(500).json({ error: 'Internal server error' ,codeUpdate:true});
     }
   }
 });
