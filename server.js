@@ -34,9 +34,10 @@ app.get('/plans', async (req, res) => {
 app.get('/get-account', async (req, res) => {
 
   try {
+    if(!req.query.accountCode) return res.status(400).json({ error: 'Account code is required' });
     const subscripitonArray = []
     const accountCode = 'code-' + req.query.accountCode;
-  
+    
     const subscriptions = client.listAccountSubscriptions(accountCode, { params: { limit: 200 } })
     
     for await (const subscription of subscriptions.each()) {
@@ -97,7 +98,7 @@ app.post('/create-account', async (req, res) => {
       res.status(400).json({ error: 'Validation error', details: err.params });
     } else {
       console.error('Unknown error:', err);
-      res.status(500).json({ error: 'Internal server error' });
+      res.status(502).json({ error: err.message });
     }
   }
  });
