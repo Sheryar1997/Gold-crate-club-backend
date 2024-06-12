@@ -80,18 +80,18 @@ app.post('/create-account', async (req, res) => {
           country: req.body.selectedCountry
         }
        },
-       custom_fields: []
+      //  custom_fields: []
      }
 
     if (req.body.couponCode) {
       subscriptionReq.coupon_codes = [req.body.couponCode];
     }
-    if (req.body.notes) {
-      subscriptionReq.custom_fields.push({
-        name: 'customer_notes',
-        value: req.body.notes
-      });
-    }
+    // if (req.body.notes) {
+    //   subscriptionReq.custom_fields.push({
+    //     name: 'customer_notes',
+    //     value: req.body.notes
+    //   });
+    // }
     console.log(subscriptionReq);
 
 
